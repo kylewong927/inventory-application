@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  data_store:
+    image: "postgres: -latest"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "postgresData:/var/lib/postgresql/data"
+
+  app:
+    image: inventory-application:latest
+    ports:
+      - 8080:8080

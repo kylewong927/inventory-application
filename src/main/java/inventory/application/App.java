@@ -3,12 +3,18 @@
  */
 package inventory.application;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
+
+    private static Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        SpringApplication.run(App.class, args);
+        logger.info("Inventory application Started");
     }
 }
