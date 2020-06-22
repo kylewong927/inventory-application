@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
@@ -21,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
+@SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @TestPropertySource(value={"classpath:application.yml"})
@@ -44,7 +46,7 @@ public class CategoryControllerTests {
         Category category = new Category();
         category.setId(1);
         category.setName("Food");
-        MockHttpServletRequestBuilder builder = post("/categories")
+        MockHttpServletRequestBuilder builder = post("http://localhost:8080/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\": 1, \"name\": \"Food\"}");
         when(categoryService.createCategory(category)).thenReturn(ResponseEntity.status(403).build());
@@ -60,6 +62,6 @@ public class CategoryControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\": 1, \"name\": \"Food\"}");
         when(categoryService.createCategory(category)).thenReturn(ResponseEntity.status(201).build());
-        this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isForbidden());
+        this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isCreated());
     }
 }

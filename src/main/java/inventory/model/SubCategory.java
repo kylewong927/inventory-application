@@ -9,6 +9,8 @@ public class SubCategory {
 
     public Integer categoryId;
 
+    public SubCategory() {}
+
     public SubCategory(SubCategoryEntity subCategoryEntity) {
         this.id = subCategoryEntity.getId();
         this.name = subCategoryEntity.getName();

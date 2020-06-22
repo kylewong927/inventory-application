@@ -2,19 +2,18 @@ package inventory.model.db;
 
 import inventory.model.Category;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "category")
 public class CategoryEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     public String name;
+
+    public CategoryEntity() {}
 
     public CategoryEntity(Category category){
         this.id = category.getId();

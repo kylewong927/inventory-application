@@ -2,21 +2,20 @@ package inventory.model.db;
 
 import inventory.model.SubCategory;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "subCategory")
 public class SubCategoryEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     public String name;
 
     public Integer categoryId;
+
+    public SubCategoryEntity() {}
 
     public SubCategoryEntity(SubCategory subCategory){
         this.id = subCategory.getId();
