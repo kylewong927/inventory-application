@@ -1,4 +1,4 @@
 FROM adoptopenjdk/openjdk11:ubi
-RUN mkdir /opt/app
-COPY japp.jar /opt/app
-CMD ["java", "-jar", "/opt/app/japp.jar"]
+VOLUME /tmp
+ADD spring-boot-docker-1.0.jar app.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]

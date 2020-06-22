@@ -1,11 +1,14 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432
+    url: jdbc:postgresql://localhost:5432/inventory-application?ssl=false&sslfactory=org.postgresql.ssl.NonValidatingFactory
     username: postgres
     password: password
+    driver-class-name: org.postgresql.Driver
 
 spring.jpa:
+  database: POSTGRESQL
   show_sql: true
   generate-ddl: false
   properties.hibernate.temp.use_jdbc_metadata_defaults: false
-  hibernate.ddl-auto: create
+  hibernate.ddl-auto: none
+  database-platform: org.hibernate.dialect.PostgreSQL9Dialect
