@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  data_store:
+    image: postgres
+    environment:
+      POSTGRES_DB: "db"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - "5432:5432"
