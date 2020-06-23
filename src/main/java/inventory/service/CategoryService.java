@@ -39,7 +39,7 @@ public class CategoryService {
 
     public List<SubCategory> getAllSubCategory(Integer categoryId) {
         logger.info("Get all subCategory from database");
-        List<SubCategoryEntity> subCategoryEntityList = subCategoryRepository.findAllByCategoryId(categoryId);
+        List<SubCategoryEntity> subCategoryEntityList = subCategoryRepository.findAllById(categoryId);
         List<SubCategory> subCategoryList = new ArrayList();
         for(SubCategoryEntity subCategoryEntity: subCategoryEntityList) {
             subCategoryList.add(new SubCategory(subCategoryEntity));
@@ -58,10 +58,11 @@ public class CategoryService {
     }
 
     public ResponseEntity createCategory(Category category) {
+        logger.info("Create category in database, categoryId is " + category.toString());
         Optional<CategoryEntity> categoryDb = categoryRepository.findById(category.getId());
         if (categoryDb.isPresent()) {
             logger.info("Category already exist " + category.getId().toString());
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(409).build();
         }
         CategoryEntity categoryEntity = new CategoryEntity(category);
         categoryRepository.save(categoryEntity);
@@ -81,6 +82,6 @@ public class CategoryService {
             logger.info("Category " + category.getId().toString() + " updated in database");
         }
 
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.status(202).build();
     }
 }

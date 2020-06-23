@@ -4,11 +4,16 @@ import inventory.model.db.CategoryEntity;
 
 public class Category {
 
-    public Integer id;
+    private Integer id;
 
-    public String name;
+    private String name;
 
-    public Category() {}
+    private Category() {}
+
+    private Category(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Category(CategoryEntity categoryEntity) {
         this.id = categoryEntity.getId();
@@ -29,5 +34,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

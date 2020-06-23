@@ -1,8 +1,10 @@
 package inventory.model.db;
 
+import inventory.model.Category;
 import inventory.model.SubCategory;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "subCategory")
@@ -11,16 +13,29 @@ public class SubCategoryEntity {
     @Id
     private Integer id;
 
-    public String name;
+    private String name;
 
-    public Integer categoryId;
+    private Date created;
+
+    private Date updated;
+
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    public CategoryEntity categoryEntity;
 
     public SubCategoryEntity() {}
 
-    public SubCategoryEntity(SubCategory subCategory){
+    public SubCategoryEntity(SubCategory subCategory, CategoryEntity categoryEntity){
         this.id = subCategory.getId();
         this.name = subCategory.getName();
-        this.categoryId = subCategory.getCategoryId();
+        this.categoryEntity = categoryEntity;
+    }
+
+    public SubCategoryEntity(Integer id, String name, Category category) {
+        this.id = id;
+        this.name = name;
+        this.categoryEntity = new CategoryEntity(category);
     }
 
     public Integer getId() {
@@ -39,11 +54,21 @@ public class SubCategoryEntity {
         this.name = name;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
     }
 }

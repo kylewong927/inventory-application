@@ -1,11 +1,16 @@
 package inventory.controller;
 
 import inventory.model.Category;
+import inventory.model.db.CategoryEntity;
+import inventory.repository.CategoryRepository;
 import inventory.service.CategoryService;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,29 +37,23 @@ public class CategoryControllerTests {
     private CategoryService categoryService;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setup() {
+        categoryRepository.deleteAll();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        CategoryEntity categoryEntity = new CategoryEntity(2, "Clothes");
+        categoryRepository.save(categoryEntity);
     }
 
     @Test
-    public void testWhenServiceCanFindCategoryIdThenReturn403() throws Exception {
-        Category category = new Category();
-        category.setId(1);
-        category.setName("Food");
-        MockHttpServletRequestBuilder builder = post("http://localhost:8080/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1, \"name\": \"Food\"}");
-        when(categoryService.createCategory(category)).thenReturn(ResponseEntity.status(403).build());
-        this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isForbidden());
-    }
-
-    @Test
-    public void testWhenServiceCannotFindCategoryIdThenReturn201() throws Exception {
+    public void testWhenCreateCategoryCannotFindCategoryIdThenReturn201() throws Exception {
         Category category = new Category();
         category.setId(1);
         category.setName("Food");
@@ -63,5 +62,11 @@ public class CategoryControllerTests {
                 .content("{\"id\": 1, \"name\": \"Food\"}");
         when(categoryService.createCategory(category)).thenReturn(ResponseEntity.status(201).build());
         this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    public void testWhenGetAllCategoryThenReturnOneRecord() throws Exception {
+        MockHttpServletRequestBuilder builder = get("http://localhost:8080/categories");
+        this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

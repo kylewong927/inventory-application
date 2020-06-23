@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Category>> getAllCategory() {
         logger.info("Received GET call to get all category");
         return ResponseEntity.status(200).body(categoryService.getAllCategory());
@@ -37,7 +36,7 @@ public class CategoryController {
         logger.info("Received GET call to get all subCategory");
         return ResponseEntity.status(200).body(categoryService.getAllSubCategory(categoryId));
     }
-    
+
     @PostMapping
     public ResponseEntity createCategory(@RequestBody Category category) {
         logger.info("Received POST call to create category");

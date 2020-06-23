@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface SubCategoryRepository extends CrudRepository<SubCategoryEntity, Integer> {
 
-    List<SubCategoryEntity> findAllByCategoryId(Integer categoryId);
+    List<SubCategoryEntity> findAllById(Integer categoryId);
 }

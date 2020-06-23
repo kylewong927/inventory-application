@@ -3,18 +3,24 @@ package inventory.model;
 import inventory.model.db.SubCategoryEntity;
 
 public class SubCategory {
-    public Integer id;
 
-    public String name;
+    private Integer id;
 
-    public Integer categoryId;
+    private String name;
+
+    private Integer categoryId;
 
     public SubCategory() {}
+
+    public SubCategory(Integer id, String name, Integer categoryId) {
+        this.id = id;
+        this.name = name;
+        this.categoryId = categoryId;
+    }
 
     public SubCategory(SubCategoryEntity subCategoryEntity) {
         this.id = subCategoryEntity.getId();
         this.name = subCategoryEntity.getName();
-        this.categoryId = subCategoryEntity.getCategoryId();
     }
 
     public Integer getId() {

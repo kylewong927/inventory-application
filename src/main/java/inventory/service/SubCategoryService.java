@@ -4,6 +4,7 @@ import inventory.model.Category;
 import inventory.model.SubCategory;
 import inventory.model.db.CategoryEntity;
 import inventory.model.db.SubCategoryEntity;
+import inventory.repository.CategoryRepository;
 import inventory.repository.SubCategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class SubCategoryService {
 
     private static Logger logger = LoggerFactory.getLogger(SubCategoryService.class);
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private SubCategoryRepository subCategoryRepository;
@@ -37,9 +41,14 @@ public class SubCategoryService {
         Optional<SubCategoryEntity> subCategoryDb = subCategoryRepository.findById(subCategory.getId());
         if (subCategoryDb.isPresent()) {
             logger.info("SubCategory already exist " + subCategory.getId().toString());
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(409).build();
         }
-        SubCategoryEntity subCategoryEntity = new SubCategoryEntity(subCategory);
+        Optional<CategoryEntity> categoryDb = categoryRepository.findById(subCategory.getCategoryId());
+        if (categoryDb.isEmpty()) {
+            logger.info("Category id does not exist " + subCategory.getCategoryId().toString());
+            return ResponseEntity.status(409).build();
+        }
+        SubCategoryEntity subCategoryEntity = new SubCategoryEntity(subCategory, categoryDb.get());
         subCategoryRepository.save(subCategoryEntity);
         logger.info("SubCategory " + subCategoryEntity.getId().toString() + " created in database");
         return ResponseEntity.status(201).build();
@@ -53,11 +62,10 @@ public class SubCategoryService {
         } else {
             SubCategoryEntity subCategoryEntity = subCategoryDb.get();
             subCategoryEntity.setName(subCategory.getName());
-            subCategoryEntity.setCategoryId(subCategory.getCategoryId());
             subCategoryRepository.save(subCategoryEntity);
             logger.info("SubCategory " + subCategory.getId().toString() + " updated in database");
         }
 
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.status(202).build();
     }
 }
